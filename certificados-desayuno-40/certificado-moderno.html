@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Reconocimiento Ponentes · Opción Moderna</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+  /* Tamaño carta horizontal (11 x 8.5 in = 1056 x 816 px) */
+  @page { size: 11in 8.5in; margin: 0; }
+  :root { --navy: #0b1f4d; --navy-2: #163a7d; --gold: #a97a26; --gold-2: #d9b25c; --gold-3: #ecd081; --ink: #2a2a35; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #e9e4da; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-variant-numeric: lining-nums; }
+  svg text { font-variant-numeric: lining-nums; }
+
+  .page {
+    position: relative; width: 1056px; height: 816px; overflow: hidden;
+    background: radial-gradient(ellipse at 65% 45%, #fffdf8 0%, #fcf7ea 70%, #f5ecd8 100%);
+    break-after: page;
+  }
+  .page:last-child { break-after: auto; }
+  @media screen { .page { margin: 24px auto; box-shadow: 0 6px 30px rgba(0,0,0,.18); } }
+  .art { position: absolute; inset: 0; }
+  .abs { position: absolute; }
+
+  /* Panel lateral */
+  .panel { left: 0; top: 0; width: 318px; height: 816px; text-align: center; color: var(--gold-3); }
+  .badge { left: 99px; top: 64px; width: 120px; }
+  .stats { left: 0; width: 318px; top: 252px; }
+  .stat .n { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 46px; line-height: 1; color: var(--gold-3); }
+  .stat .l { font-family: 'Cinzel', serif; font-weight: 700; font-size: 10.5px; letter-spacing: 2.6px; color: #f3e6bf; margin-top: 4px; }
+  .stat + .stat { margin-top: 14px; }
+  .stat + .stat::before { content: ""; display: block; width: 7px; height: 7px; margin: 0 auto 14px; transform: rotate(45deg); background: var(--gold-2); }
+  .seal { left: 94px; top: 592px; width: 130px; }
+
+  /* Contenido */
+  .x { left: 382px; }
+  .logo { top: 60px; height: 96px; }
+  .title { top: 190px; font-family: 'Playfair Display', serif; font-weight: 800; font-size: 50px; letter-spacing: 8px; line-height: 1; color: var(--navy); }
+  .event { top: 254px; display: flex; align-items: center; gap: 12px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 14.5px; letter-spacing: 3px; color: var(--navy-2); }
+  .event .script { font-family: 'Parisienne', cursive; font-weight: 400; font-size: 29px; letter-spacing: 0; color: var(--gold); margin-top: -4px; }
+  .rule { top: 300px; width: 90px; height: 3px; background: linear-gradient(90deg, #a8792a, #ecd081, #a8792a); }
+  .granted { top: 326px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 4.5px; color: var(--gold); }
+  .name { top: 340px; width: 610px; font-family: 'Great Vibes', cursive; font-size: 80px; line-height: 1.15; color: var(--navy); white-space: nowrap; min-height: 92px; }
+  .nameline { top: 440px; width: 610px; height: 1.5px; background: linear-gradient(90deg, #a8792a, #ecd081 50%, rgba(236,208,129,0)); }
+  .text { top: 462px; width: 600px; font-family: 'Montserrat', sans-serif; font-size: 13.5px; line-height: 1.68; color: var(--ink); }
+  .text b { font-weight: 600; color: var(--navy); }
+  .text em { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500; font-size: 14.8px; color: var(--navy); }
+
+  .block { top: 652px; width: 260px; }
+  .block .line { border-top: 1.2px solid var(--navy); margin-bottom: 7px; }
+  .block .big { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 16.5px; color: var(--navy); }
+  .block .small { font-family: 'Montserrat', sans-serif; font-size: 10px; color: var(--ink); margin-top: 2px; line-height: 1.45; }
+  .block .ec { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 9.5px; letter-spacing: 1.1px; color: var(--gold); margin-top: 3px; }
+  .date { left: 712px; }
+</style>
+</head>
+<body>
+<div id="out"></div>
+<script src="nombres.js"></script>
+<script src="comun.js"></script>
+<script>
+  const W = 1056, H = 816, P = 318;
+  const marca = G.roseta(150, 7, 40, 8) + G.roseta(112, 6, 32, 6) + G.espiro(84, 30, 46, 15);
+  const banda = G.banda(H, 14, 30, 4);
+  const marcaFondo = G.roseta(300, 10, 56, 9) + G.espiro(210, 75, 115, 15);
+
+  const arte = `
+  <svg class="art" viewBox="0 0 ${W} ${H}">
+    <!-- grabado de fondo muy sutil -->
+    <path d="${marcaFondo}" transform="translate(${(P + W) / 2 + 20} ${H / 2 + 30})" fill="none" stroke="#c9a14f" stroke-width=".5" opacity=".1"/>
+    <!-- panel azul -->
+    <rect x="0" y="0" width="${P}" height="${H}" fill="url(#gNavy)"/>
+    <path d="${marca}" transform="translate(${P / 2} ${H / 2 + 6})" fill="none" stroke="#d9b25c" stroke-width=".5" opacity=".22"/>
+    <path d="${banda}" transform="translate(${P - 20} 0) rotate(90)" fill="none" stroke="#d9b25c" stroke-width=".45" opacity=".75"/>
+    <rect x="${P}" y="0" width="5" height="${H}" fill="url(#gGold)"/>
+    <rect x="${P + 11}" y="0" width="1.2" height="${H}" fill="#c99a3f"/>
+    <!-- esquinas derechas -->
+    <path d="M${W - 190} 0 H${W} V190 Z" fill="url(#gNavy)"/>
+    <path d="M${W - 214} 0 L${W} 214" stroke="url(#gGold)" stroke-width="3"/>
+    <path d="M${W - 232} 0 L${W} 232" stroke="#c99a3f" stroke-width="1"/>
+    <path d="M${W - 150} ${H} H${W} V${H - 150} Z" fill="url(#gNavy)"/>
+    <path d="M${W - 174} ${H} L${W} ${H - 174}" stroke="url(#gGold)" stroke-width="3"/>
+    <path d="M${W - 192} ${H} L${W} ${H - 192}" stroke="#c99a3f" stroke-width="1"/>
+  </svg>`;
+
+  armar((nombre, i) => `
+  <section class="page">
+    ${arte}
+    <div class="abs panel">
+      <div class="abs badge">${insignia('ed' + i)}</div>
+      <div class="abs stats">
+        <div class="stat"><div class="n">59</div><div class="l">AÑOS DE OLEDA</div></div>
+        <div class="stat"><div class="n">4</div><div class="l">AÑOS DE DESAYUNOS</div></div>
+        <div class="stat"><div class="n">9</div><div class="l">AÑOS DE REINVENTARSE</div></div>
+      </div>
+      <div class="abs seal">${sello('se' + i, false)}</div>
+    </div>
+
+    <img class="abs x logo" src="img/logo-oleda.png" alt="Oleda life coach">
+    <div class="abs x title">RECONOCIMIENTO</div>
+    <div class="abs x event"><span>DESAYUNO EMPRESARIAL</span><span class="script">con Propósito</span></div>
+    <div class="abs x rule"></div>
+    <div class="abs x granted">SE OTORGA EL PRESENTE A</div>
+    <div class="abs x name" data-name>${nombre}</div>
+    <div class="abs x nameline"></div>
+    <p class="abs x text">
+      Por su valiosa participación como <b>Ponente</b> en el <b>Desayuno Empresarial con Propósito,
+      Edición #40</b> <em>“Celebra la Vida”</em>, compartiendo su experiencia, conocimiento e historia
+      para inspirar el crecimiento personal y empresarial de cada asistente.
+    </p>
+
+    <div class="abs x block">
+      <div class="line"></div>
+      <div class="big">Oleda Maldonado</div>
+      <div class="small">Life Coach · Organizadora</div>
+      <div class="ec">ESTÁNDAR DE COMPETENCIA EC0217.01</div>
+    </div>
+    <div class="abs block date">
+      <div class="line"></div>
+      <div class="big">17 de octubre de 2026</div>
+      <div class="small">La Mansión Restaurant<br>Insurgentes, Ciudad de México</div>
+    </div>
+  </section>`, 80);
+</script>
+</body>
+</html>
