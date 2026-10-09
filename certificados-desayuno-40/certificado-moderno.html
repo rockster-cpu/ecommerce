@@ -52,7 +52,9 @@
   .block .big { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 16.5px; color: var(--navy); }
   .block .small { font-family: 'Montserrat', sans-serif; font-size: 10px; color: var(--ink); margin-top: 2px; line-height: 1.45; }
   .block .ec { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 9.5px; letter-spacing: 1.1px; color: var(--gold); margin-top: 3px; }
-  .date { left: 712px; }
+  .sign { left: 537px; width: 300px; text-align: center; top: 662px; }
+  .when { top: 556px; font-family: 'Montserrat', sans-serif; font-size: 11.5px; color: var(--ink); }
+  .when b { font-weight: 600; color: var(--navy); }
 </style>
 </head>
 <body>
@@ -61,17 +63,15 @@
 <script src="comun.js"></script>
 <script>
   const W = 1056, H = 816, P = 318;
-  const marca = G.roseta(150, 7, 40, 8) + G.roseta(112, 6, 32, 6) + G.espiro(84, 30, 46, 15);
   const banda = G.banda(H, 14, 30, 4);
-  const marcaFondo = G.roseta(300, 10, 56, 9) + G.espiro(210, 75, 115, 15);
 
   const arte = `
   <svg class="art" viewBox="0 0 ${W} ${H}">
-    <!-- grabado de fondo muy sutil -->
-    <path d="${marcaFondo}" transform="translate(${(P + W) / 2 + 20} ${H / 2 + 30})" fill="none" stroke="#c9a14f" stroke-width=".5" opacity=".1"/>
+    <!-- marca de agua: círculo del logo -->
+    <use href="#oledaSim" x="${(P + W) / 2 - 262}" y="${H / 2 - 250}" width="540" height="557" opacity=".065"/>
     <!-- panel azul -->
     <rect x="0" y="0" width="${P}" height="${H}" fill="url(#gNavy)"/>
-    <path d="${marca}" transform="translate(${P / 2} ${H / 2 + 6})" fill="none" stroke="#d9b25c" stroke-width=".5" opacity=".22"/>
+    <use href="#oledaSim" x="${P / 2 - 140}" y="${H / 2 - 134}" width="280" height="289" opacity=".24" style="--s-n:#6d9ae6; --s-o:#e2bf6c"/>
     <path d="${banda}" transform="translate(${P - 20} 0) rotate(90)" fill="none" stroke="#d9b25c" stroke-width=".45" opacity=".75"/>
     <rect x="${P}" y="0" width="5" height="${H}" fill="url(#gGold)"/>
     <rect x="${P + 11}" y="0" width="1.2" height="${H}" fill="#c99a3f"/>
@@ -110,16 +110,13 @@
       para inspirar el crecimiento personal y empresarial de cada asistente.
     </p>
 
-    <div class="abs x block">
+    <p class="abs x when"><b>Sábado 17 de octubre de 2026</b> &nbsp;·&nbsp; La Mansión Restaurant, Insurgentes, Ciudad de México</p>
+
+    <div class="abs block sign">
       <div class="line"></div>
       <div class="big">Oleda Maldonado</div>
       <div class="small">Life Coach · Organizadora</div>
       <div class="ec">ESTÁNDAR DE COMPETENCIA EC0217.01</div>
-    </div>
-    <div class="abs block date">
-      <div class="line"></div>
-      <div class="big">17 de octubre de 2026</div>
-      <div class="small">La Mansión Restaurant<br>Insurgentes, Ciudad de México</div>
     </div>
   </section>`, 80);
 </script>

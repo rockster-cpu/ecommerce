@@ -33,6 +33,23 @@ const G = {
     }
     return d;
   },
+  // Media luna: círculo (x1,y1,r1) menos círculo (x2,y2,r2), como trazo cerrado
+  media(x1, y1, r1, x2, y2, r2) {
+    const n = 720, phi = Math.atan2(y2 - y1, x2 - x1);
+    const dentro2 = (x, y) => (x - x2) ** 2 + (y - y2) ** 2 < r2 * r2;
+    const dentro1 = (x, y) => (x - x1) ** 2 + (y - y1) ** 2 < r1 * r1;
+    const ext = [], int = [];
+    for (let i = 0; i <= n; i++) {
+      const t = phi + (i / n) * 2 * Math.PI;
+      const x = x1 + r1 * Math.cos(t), y = y1 + r1 * Math.sin(t);
+      if (!dentro2(x, y)) ext.push([x, y]);
+      const u = x2 + r2 * Math.cos(t), v = y2 + r2 * Math.sin(t);
+      if (dentro1(u, v)) int.push([u, v]);
+    }
+    const ult = ext[ext.length - 1], d = p => (p[0] - ult[0]) ** 2 + (p[1] - ult[1]) ** 2;
+    if (d(int[0]) > d(int[int.length - 1])) int.reverse();
+    return 'M' + [...ext, ...int].map(p => p[0].toFixed(2) + ' ' + p[1].toFixed(2)).join('L') + 'Z';
+  },
   // Espirógrafo (hipotrocoide) para el centro de rosetas
   espiro(R, r, dd, vueltas, cx = 0, cy = 0) {
     const pasos = 2400;
@@ -47,7 +64,7 @@ const G = {
   }
 };
 
-const DEFS = `
+const DEFS = () => `
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <linearGradient id="gGold" x1="0" y1="0" x2="1" y2="1">
     <stop offset="0" stop-color="#f6e3a4"/><stop offset=".35" stop-color="#c8963b"/>
@@ -59,6 +76,15 @@ const DEFS = `
   <linearGradient id="gNavy" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0" stop-color="#1b3f8a"/><stop offset="1" stop-color="#07142f"/>
   </linearGradient>
+  <linearGradient id="gLogoOro" x1="0" y1="0" x2=".6" y2="1">
+    <stop offset="0" stop-color="#b98a1e"/><stop offset="1" stop-color="#f7c514"/>
+  </linearGradient>
+  <!-- Círculo del logo de Oleda (colores ajustables con --s-n, --s-c, --s-o) -->
+  <symbol id="oledaSim" viewBox="0 0 253 261">
+    <path d="${G.media(125, 133, 125, 125, 106, 120)}" style="fill: var(--s-n, #1e3a8c)"/>
+    <path d="${G.media(128, 106.5, 106, 106, 106, 94.5)}" style="fill: var(--s-c, #12aeea)"/>
+    <path d="${G.media(105, 105.5, 85.5, 128.5, 106, 75)}" style="fill: var(--s-o, url(#gLogoOro))"/>
+  </symbol>
   <radialGradient id="gNavyR" cx=".35" cy=".3" r=".9">
     <stop offset="0" stop-color="#1d4594"/><stop offset="1" stop-color="#081638"/>
   </radialGradient>
@@ -104,7 +130,7 @@ function insignia(id) {
 
 // Arma una hoja por nombre a partir de una función plantilla(nombre, i)
 function armar(plantilla, tamNombre) {
-  document.body.insertAdjacentHTML('afterbegin', DEFS);
+  document.body.insertAdjacentHTML('afterbegin', DEFS());
   const q = new URLSearchParams(location.search);
   const lista = q.has('nombre') ? [q.get('nombre')] : NOMBRES;
   const out = document.getElementById('out');
